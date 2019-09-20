@@ -1,10 +1,12 @@
 package com.kshiitj.poc.fundstransfer.resources;
 
-import com.kshiitj.poc.fundstransfer.domain.Account;
+import com.kshiitj.poc.fundstransfer.boundry.FundTransfers;
+import com.kshiitj.poc.fundstransfer.domain.FundsTransferResponse;
 import com.kshiitj.poc.fundstransfer.domain.TransferRequest;
-import com.kshiitj.poc.fundstransfer.service.AccountService;
+import com.kshiitj.poc.fundstransfer.exceptions.AccountNotFoundException;
+import com.kshiitj.poc.fundstransfer.exceptions.InsufficientBalanceException;
 
-import javax.ws.rs.Consumes;
+import javax.inject.Inject;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -12,23 +14,17 @@ import javax.ws.rs.core.MediaType;
 
 @Path("/funds/transfer")
 @Produces(MediaType.APPLICATION_JSON)
+//@Log4j2
 public class FundsTransferResource {
 
-    private AccountService accountService;
-
-    public FundsTransferResource(AccountService accountService){
-        this.accountService=accountService;
+    private FundTransfers fundTransfers;
+    @Inject
+    public FundsTransferResource(FundTransfers fundTransfers){
+        this.fundTransfers=fundTransfers;
     }
 
     @POST
-    public Account transferMoney(TransferRequest request){
-        //3 steps
-        // Debit
-        // Create transaction
-        // Credit
-        //return Debit Account
-        return accountService.getAccount(request.getFromAccountId());
-
+    public FundsTransferResponse transferMoney(TransferRequest request) throws AccountNotFoundException, InsufficientBalanceException {
+        return fundTransfers.transfer(request);
     }
-
 }

@@ -1,8 +1,12 @@
 package com.kshiitj.poc.fundstransfer.resources;
 
 
+import com.kshiitj.poc.fundstransfer.boundry.FundTransfers;
 import com.kshiitj.poc.fundstransfer.domain.Account;
+import com.kshiitj.poc.fundstransfer.domain.FundsTransferResponse;
 import com.kshiitj.poc.fundstransfer.domain.TransferRequest;
+import com.kshiitj.poc.fundstransfer.exceptions.AccountNotFoundException;
+import com.kshiitj.poc.fundstransfer.exceptions.InsufficientBalanceException;
 import com.kshiitj.poc.fundstransfer.service.AccountService;
 import io.dropwizard.testing.junit.ResourceTestRule;
 import org.eclipse.jetty.http.HttpStatus;
@@ -29,33 +33,48 @@ public class FundsTransferResourceTest {
     private static URI serverUri;
 
     @Mock
-    public static AccountService accountService=mock(AccountService.class);
+    public static FundTransfers fundTransfers=mock(FundTransfers.class);
 
     Account source;
 
     @ClassRule
-    public static final ResourceTestRule resource = ResourceTestRule.builder().addResource(new FundsTransferResource(accountService)).build();
+    public static final ResourceTestRule resource = ResourceTestRule.builder().addResource(new FundsTransferResource(fundTransfers)).build();
 
     @Before
     public void setUpTest(){
         //accountService=new AccountService();
-        source=new Account(UUID.randomUUID(), BigDecimal.valueOf(100));
+        source=new Account(BigDecimal.valueOf(100));
     }
     @After
     public void cleanUpTest(){
-        reset(accountService);
+        reset(fundTransfers);
     }
     @Test
-    public void testFundsTransfer() throws IOException {
-        given(accountService.getAccount(source.getId())).willReturn(source);
-        Account dest=new Account(UUID.randomUUID());
-        System.out.println(source);
-        TransferRequest req=new TransferRequest(dest.getId(),source.getId(),BigDecimal.valueOf(25.5),DateTime.now(),"SomeReference");
+    public void testFundsTransfer() throws AccountNotFoundException, InsufficientBalanceException {
+
+        TransferRequest req=new TransferRequest(UUID.randomUUID(),UUID.randomUUID(),BigDecimal.valueOf(25.5));
+        given(fundTransfers.transfer(req)).willReturn(new FundsTransferResponse(UUID.randomUUID(),FundsTransferResponse.Status.SUCCESS,null));
         Response response=resource.target("/funds/transfer").request(MediaType.APPLICATION_JSON_TYPE).post(Entity.json(req));
         assertThat(response.getStatus(), equalTo(HttpStatus.OK_200));
         System.out.println(response.getEntity().toString());
-        Account account= response.readEntity(Account.class);
-        assertThat(account.getId(),equalTo(source.getId()));
-        assertThat(account.getBalance(),notNullValue());
+        FundsTransferResponse resp= response.readEntity(FundsTransferResponse.class);
+        assertThat(resp.getTransferId(),instanceOf(UUID.class));
+        assertThat(resp.getStatus(),equalTo(FundsTransferResponse.Status.SUCCESS));
+        //assertThat(account.getBalance(),equalTo(source.getBalance().subtract(BigDecimal.valueOf(25.5))));
     }
+    /*
+    BigDecimal money=BigDecimal.valueOf(25.5);
+        given(accountService.getAccount(source.getId())).willReturn(source);
+        given(accountService.createAccount(money)).willReturn(new Account(money));
+        given(accountService.deposit(source.getId(),money)).willReturn(source);
+        Account dest=accountService.createAccount(money);
+        given(accountService.getAccount(source.getId())).willReturn(source);
+        given(accountService.getAccount(dest.getId())).willReturn(source);
+        dest.setBalance(dest.getBalance().subtract(money));
+        given(accountService.deposit(dest.getId(),money)).willReturn(dest);
+        source.setBalance(source.getBalance().add(money));
+        given(accountService.withdraw(source.getId(),money)).willReturn(source);
+        System.out.println(source);
+     */
+
 }
