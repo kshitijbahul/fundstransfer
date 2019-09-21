@@ -6,6 +6,7 @@ import com.kshiitj.poc.fundstransfer.domain.Account;
 import com.kshiitj.poc.fundstransfer.domain.FundsTransferResponse;
 import com.kshiitj.poc.fundstransfer.domain.TransferRequest;
 import com.kshiitj.poc.fundstransfer.exceptions.AccountNotFoundException;
+import com.kshiitj.poc.fundstransfer.exceptions.FundsTransferException;
 import com.kshiitj.poc.fundstransfer.exceptions.InsufficientBalanceException;
 import com.kshiitj.poc.fundstransfer.service.AccountService;
 import io.dropwizard.testing.junit.ResourceTestRule;
@@ -53,7 +54,7 @@ public class FundsTransferResourceTest {
     public void testFundsTransfer() throws AccountNotFoundException, InsufficientBalanceException {
 
         TransferRequest req=new TransferRequest(UUID.randomUUID(),UUID.randomUUID(),BigDecimal.valueOf(25.5));
-        given(fundTransfers.transfer(req)).willReturn(new FundsTransferResponse(UUID.randomUUID(),FundsTransferResponse.Status.SUCCESS,null));
+        given(fundTransfers.transfer(req)).willReturn(new FundsTransferResponse(UUID.randomUUID(),FundsTransferResponse.Status.SUCCESS));
         Response response=resource.target("/funds/transfer").request(MediaType.APPLICATION_JSON_TYPE).post(Entity.json(req));
         assertThat(response.getStatus(), equalTo(HttpStatus.OK_200));
         System.out.println(response.getEntity().toString());
@@ -61,6 +62,13 @@ public class FundsTransferResourceTest {
         assertThat(resp.getTransferId(),instanceOf(UUID.class));
         assertThat(resp.getStatus(),equalTo(FundsTransferResponse.Status.SUCCESS));
         //assertThat(account.getBalance(),equalTo(source.getBalance().subtract(BigDecimal.valueOf(25.5))));
+    }
+    @Test
+    public void test_fundsTransferFailedResponse(){
+        TransferRequest req=new TransferRequest(UUID.randomUUID(),UUID.randomUUID(),BigDecimal.valueOf(25.5));
+        given(fundTransfers.transfer(req)).willThrow(new FundsTransferException(FundsTransferResponse.Status.DEBIT_FAILED,"Error from Mock"));
+        Response resp=resource.target("/funds/transfer").request(MediaType.APPLICATION_JSON_TYPE).post(Entity.json(req));
+        assertThat(resp.getStatus(),equalTo(HttpStatus.INTERNAL_SERVER_ERROR_500));
     }
     /*
     BigDecimal money=BigDecimal.valueOf(25.5);

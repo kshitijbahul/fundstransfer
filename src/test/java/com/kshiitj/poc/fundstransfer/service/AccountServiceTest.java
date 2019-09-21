@@ -38,7 +38,7 @@ public class AccountServiceTest {
     }
 
     @Test
-    public void test_deposit() {
+    public void test_deposit() throws AccountNotFoundException {
         BigDecimal startingBalance=newAccount.getBalance();
         Account updatedAccount=accountService.deposit(newAccount.getId(),BigDecimal.valueOf(100));
         assertThat(updatedAccount.getId(),equalTo(newAccount.getId()));
@@ -46,7 +46,7 @@ public class AccountServiceTest {
     }
 
     @Test
-    public void test_withdrawal() {
+    public void test_withdrawal() throws AccountNotFoundException {
         BigDecimal startingBalance=newAccount.getBalance();
         Account updatedAccount=accountService.withdraw(newAccount.getId(),BigDecimal.valueOf(50));
         assertThat(updatedAccount.getId(),equalTo(newAccount.getId()));
@@ -54,17 +54,17 @@ public class AccountServiceTest {
     }
 
     @Test(expected = InsufficientBalanceException.class)
-    public void test_withdrawalNotPossible() {
+    public void test_withdrawalNotPossible() throws AccountNotFoundException {
         //Account updatedAccount=accountService.withdraw(newAccount.getId(),BigDecimal.valueOf(50));
         accountService.withdraw(newAccount.getId(),BigDecimal.valueOf(1000));
     }
 
     @Test(expected = AccountNotFoundException.class)
-    public void test_AccountNotFound() {
+    public void test_AccountNotFound() throws AccountNotFoundException {
         accountService.getAccount(UUID.randomUUID());
     }
     @Test(expected = AccountNotFoundException.class)
-    public void test_withdrawFromNonExistingAccount()  {
+    public void test_withdrawFromNonExistingAccount() throws AccountNotFoundException {
         accountService.withdraw(UUID.randomUUID(),BigDecimal.valueOf(1000));
     }
 

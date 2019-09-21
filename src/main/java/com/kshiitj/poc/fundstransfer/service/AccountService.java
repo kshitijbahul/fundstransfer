@@ -22,7 +22,7 @@ public class AccountService {
     public AccountService(AccountStore accountStore){
         this.accountStore=accountStore;
     }
-    public Account getAccount(UUID accountId){
+    public Account getAccount(UUID accountId) throws AccountNotFoundException{
         return this.accountStore.getAccount(accountId);
     }
     public Account createAccount(BigDecimal initialBalance) {
@@ -30,7 +30,7 @@ public class AccountService {
         this.accountStore.saveAccount(account);
         return account;
     }
-    public Account withdraw(UUID accountId,BigDecimal amount) throws AccountNotFoundException, InsufficientBalanceException {
+    public Account withdraw(UUID accountId,BigDecimal amount) throws AccountNotFoundException {
         Account account=this.accountStore.getAccount(accountId);
         account.withdraw(amount);
         this.accountStore.saveAccount(account);

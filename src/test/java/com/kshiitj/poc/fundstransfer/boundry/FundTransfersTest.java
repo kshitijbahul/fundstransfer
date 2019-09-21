@@ -3,6 +3,8 @@ package com.kshiitj.poc.fundstransfer.boundry;
 import com.kshiitj.poc.fundstransfer.domain.Account;
 import com.kshiitj.poc.fundstransfer.domain.FundsTransferResponse;
 import com.kshiitj.poc.fundstransfer.domain.TransferRequest;
+import com.kshiitj.poc.fundstransfer.exceptions.AccountNotFoundException;
+import com.kshiitj.poc.fundstransfer.exceptions.FundsTransferException;
 import com.kshiitj.poc.fundstransfer.service.AccountService;
 import com.kshiitj.poc.fundstransfer.store.AccountStore;
 import com.kshiitj.poc.fundstransfer.store.InMemoryAccountStore;
@@ -51,16 +53,16 @@ public class FundTransfersTest {
         fundTransfers.transfer(transferRequest);
     }
     @Test(expected = IllegalArgumentException.class)
-    public void test_FundsTransfer_invalidToAccount(){
+    public void test_FundsTransfer_invalidToAccount() throws AccountNotFoundException {
         BigDecimal firstBalance=a1.getBalance();
         BigDecimal secondBalance=a2.getBalance();
         TransferRequest transferRequest=new TransferRequest(UUID.randomUUID(),a2.getId(),BigDecimal.ZERO);
         fundTransfers.transfer(transferRequest);
-        assertThat(accountService.getAccount(a1.getId()).getBalance(),equalTo(firstBalance.subtract(BigDecimal.valueOf(5))));
-        assertThat(accountService.getAccount(a2.getId()).getBalance(),equalTo(secondBalance.add(BigDecimal.valueOf(5))));
+        assertThat(accountService.getAccount(a1.getId()).getBalance(),equalTo(firstBalance.subtract(BigDecimal.valueOf(5.0))));
+        assertThat(accountService.getAccount(a2.getId()).getBalance(),equalTo(secondBalance.add(BigDecimal.valueOf(5.0))));
     }
     @Test
-    public void test_FundsTransfer_success(){
+    public void test_FundsTransfer_success() throws AccountNotFoundException {
         BigDecimal toBalance=a1.getBalance();
         BigDecimal fromBalance=a2.getBalance();
         TransferRequest transferRequest=new TransferRequest(a2.getId(),a1.getId(),BigDecimal.valueOf(5.0));
@@ -70,26 +72,26 @@ public class FundTransfersTest {
         assertThat(accountService.getAccount(a2.getId()).getBalance(),equalTo(fromBalance.subtract(BigDecimal.valueOf(5.0))));
         assertThat(accountService.getAccount(a1.getId()).getBalance(),equalTo(toBalance.add(BigDecimal.valueOf(5.0))));
     }
-    @Test
-    public void test_FundsTransfer_failedDebit(){
+    @Test(expected = FundsTransferException.class)
+    public void test_FundsTransfer_failedDebit() throws AccountNotFoundException {
         BigDecimal toBalance=a2.getBalance();
         BigDecimal fromBalance=a1.getBalance();
         TransferRequest transferRequest=new TransferRequest(a1.getId(),a2.getId(),BigDecimal.valueOf(20.0));
         FundsTransferResponse resp=fundTransfers.transfer(transferRequest);
-        assertThat(resp.getTransferId(),notNullValue());
-        assertThat(resp.getStatus(),equalTo(FundsTransferResponse.Status.DEBIT_FAILED));
+        //assertThat(resp.getTransferId(),notNullValue());
+        assertThat(resp,equalTo(FundsTransferResponse.Status.DEBIT_FAILED));
         assertThat(accountService.getAccount(a1.getId()).getBalance(),equalTo(fromBalance));
         assertThat(accountService.getAccount(a2.getId()).getBalance(),equalTo(toBalance));
     }
     @Test
-    public void test_FundsTransfer_drainAccount(){
+    public void test_FundsTransfer_drainAccount() throws AccountNotFoundException {
         BigDecimal toBalance=a1.getBalance();
         BigDecimal fromBalance=a2.getBalance();
         TransferRequest transferRequest=new TransferRequest(a2.getId(),a1.getId(),fromBalance);
         FundsTransferResponse resp=fundTransfers.transfer(transferRequest);
         assertThat(resp.getTransferId(),notNullValue());
         assertThat(resp.getStatus(),equalTo(FundsTransferResponse.Status.SUCCESS));
-        assertThat(accountService.getAccount(a2.getId()).getBalance(),equalTo(BigDecimal.ZERO));
+        assertThat(accountService.getAccount(a2.getId()).getBalance(),equalTo(BigDecimal.valueOf(0.0)));
         assertThat(accountService.getAccount(a1.getId()).getBalance(),equalTo(toBalance.add(fromBalance)));
     }
     @Test
@@ -127,7 +129,7 @@ public class FundTransfersTest {
                 //assertThat(accountService.getAccount(a2.getId()).getBalance(),equalTo(fromBalance.subtract(BigDecimal.valueOf(0.5))));
                 System.out.println(resp2);
                 assertThat(resp2.getTransferId(),notNullValue());
-                assertThat(resp2.getReason(),nullValue());
+                assertThat(resp2.getStatus(),equalTo(FundsTransferResponse.Status.SUCCESS));
                 //assertThat(resp2.getStatus(),equalTo(FundsTransferResponse.Status.DEBIT_FAILED));
                 assertThat(accountService.getAccount(a1.getId()).getBalance(),equalTo(toBalance));
                 assertThat(accountService.getAccount(a2.getId()).getBalance(),equalTo(fromBalance));
@@ -136,7 +138,7 @@ public class FundTransfersTest {
                 //FundsTransferResponse resp4=futures.get(3).get();
                 //assertThat(resp4.getTransferId(),notNullValue());
             }
-        } catch (InterruptedException | ExecutionException e) {
+        } catch (InterruptedException | ExecutionException | AccountNotFoundException e) {
             e.printStackTrace();
         }
         /*

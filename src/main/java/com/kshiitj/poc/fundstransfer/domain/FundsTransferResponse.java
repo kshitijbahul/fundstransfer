@@ -11,7 +11,7 @@ import java.util.UUID;
 public class FundsTransferResponse {
     public enum Status{
         SUCCESS("Transfer Successful"),
-        DEBIT_FAILED("source debit failed"),
+        DEBIT_FAILED("Source account debit failed"),
         CREDIT_FAILED("Could not credit account"),
         REVERSAL_FAILED("Could not reverse failed Credit");
         String message;
@@ -19,8 +19,6 @@ public class FundsTransferResponse {
             this.message=message;
         }
     }
-
     private UUID transferId;
     private Status status;
-    private String reason;
 }

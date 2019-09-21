@@ -2,7 +2,7 @@ package com.kshiitj.poc.fundstransfer.exceptions;
 
 import java.util.UUID;
 
-public class AccountNotFoundException extends RuntimeException {
+public class AccountNotFoundException extends Throwable {
 
     private int code;
     public AccountNotFoundException(UUID accountId){

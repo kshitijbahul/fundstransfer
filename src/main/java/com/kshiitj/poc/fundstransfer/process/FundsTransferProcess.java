@@ -28,10 +28,10 @@ public class FundsTransferProcess {
             UUID source=transferRequest.getFromAccountId();
             UUID dest= transferRequest.getToAccountId();
             if (source == null){
-                throw new AccountNotFoundException(transferRequest.getFromAccountId());
+                throw new IllegalArgumentException(transferRequest.getFromAccountId().toString());
             }
             if (dest == null){
-                throw new AccountNotFoundException(transferRequest.getToAccountId());
+                throw new IllegalArgumentException(transferRequest.getToAccountId().toString());
             }
             return transferRequest;
         });

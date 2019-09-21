@@ -4,6 +4,7 @@ import com.kshiitj.poc.fundstransfer.boundry.Accounts;
 import com.kshiitj.poc.fundstransfer.boundry.FundTransfers;
 import com.kshiitj.poc.fundstransfer.exceptionmappers.IllegalArgumentExceptionMapper;
 import com.kshiitj.poc.fundstransfer.exceptionmappers.NoAccountAvailableExceptionMapper;
+import com.kshiitj.poc.fundstransfer.exceptionmappers.FundsTransferExceptionMapper;
 import com.kshiitj.poc.fundstransfer.resources.AccountResource;
 import com.kshiitj.poc.fundstransfer.resources.FundsTransferResource;
 import com.kshiitj.poc.fundstransfer.service.AccountService;
@@ -30,5 +31,6 @@ public class FundsTransferApplication extends Application<FundsTransferConfigura
         environment.jersey().register(accountResource);
         environment.jersey().register(IllegalArgumentExceptionMapper.class);
         environment.jersey().register(NoAccountAvailableExceptionMapper.class);
+        environment.jersey().register(FundsTransferExceptionMapper.class);
     }
 }
