@@ -32,33 +32,30 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsNull.notNullValue;
 @UseGuiceyApp(FundsTransferApplication.class)
 public class FundTransfersTest {
-    @ClassRule
-    public static GuiceyAppRule<FundsTransferConfiguration> RULE = new GuiceyAppRule<>(FundsTransferApplication.class, "funds-transfer.yml");
-    @Inject
+    //@Inject
     private static FundTransfers fundTransfers;
-    @Inject
+    //@Inject
     private static AccountService accountService;
     private static final Account a1=new Account();
     private static final Account a2=new Account().deposit(BigDecimal.TEN);
     private static final Account a3=new Account().deposit(BigDecimal.TEN);
     private static final Account a4=new Account();
+
     @BeforeClass
     public static void setTestBed(){
-        /*
-        GuiceyAppRule<MyConfiguration> RULE = new GuiceyAppRule<>(MyApplication.class, "path/to/configuration.yaml");
-        AccountStore accountStore=new InMemoryAccountStore();
+
+        AccountStore accountStore=new InMemoryAccountStore(accountsRep);
         accountStore.saveAccount(a1);
         accountStore.saveAccount(a2);
         accountStore.saveAccount(a3);
         accountStore.saveAccount(a4);
         accountService=new AccountService(accountStore,new InMemoryTransactionsStore());
         fundTransfers=new FundTransfers(accountService);
-         */
 
         //Guice.createInjector().injectMembers(this);
-        accountService=RULE.getBean(AccountService.class);
-        accountService.createAccount(BigDecimal.ZERO);
-        accountService.createAccount(BigDecimal.TEN);
+//        accountService=RULE.getBean(AccountService.class);
+//        accountService.createAccount(BigDecimal.ZERO);
+//        accountService.createAccount(BigDecimal.TEN);
     }
     @Test(expected = IllegalArgumentException.class)
     public void test_Fundstransfer_invalidAmount(){

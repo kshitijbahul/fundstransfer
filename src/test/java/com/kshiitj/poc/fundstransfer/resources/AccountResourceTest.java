@@ -40,6 +40,7 @@ public class AccountResourceTest {
     public void after(){
         reset(accounts);
     }
+
     @ClassRule
     public static final ResourceTestRule resource = ResourceTestRule.builder().addResource(AccountResource.class).addProvider(IllegalArgumentExceptionMapper.class).addProvider(NoAccountAvailableException.class).build();
 

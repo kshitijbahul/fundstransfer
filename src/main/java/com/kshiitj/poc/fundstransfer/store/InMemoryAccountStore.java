@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 public class InMemoryAccountStore implements AccountStore {
     private final Map<UUID,Account> accounts;
     @Inject
-    private InMemoryAccountStore(@Named("accountRepository") Map<UUID,Account> accounts){
+    public InMemoryAccountStore(@Named("accountRepository") Map<UUID,Account> accounts){
         this.accounts=accounts;
     }
     @Override
