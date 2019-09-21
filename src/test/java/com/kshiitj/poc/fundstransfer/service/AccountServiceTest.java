@@ -10,6 +10,7 @@ import com.kshiitj.poc.fundstransfer.store.InMemoryTransactionsStore;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
@@ -22,13 +23,13 @@ import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 
 
 public class AccountServiceTest {
-
+    @Inject
     static AccountService accountService;
 
     static Account newAccount;
     @BeforeClass
-    public static void testBench() throws AccountNotFoundException {
-        accountService=new AccountService(new InMemoryAccountStore(),new InMemoryTransactionsStore());
+    public static void testBench(){
+        //accountService=new AccountService();
         newAccount=accountService.createAccount(BigDecimal.ZERO);
     }
 

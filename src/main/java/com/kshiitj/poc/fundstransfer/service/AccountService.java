@@ -7,17 +7,20 @@ import com.kshiitj.poc.fundstransfer.exceptions.AccountNotFoundException;
 import com.kshiitj.poc.fundstransfer.store.AccountStore;
 import com.kshiitj.poc.fundstransfer.store.TransactionStore;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@Singleton
 public class AccountService {
-    private AccountStore accountStore;
-    private TransactionStore transactionStore;
-
-    public AccountService(AccountStore accountStore,TransactionStore transactionStore){
+    private final AccountStore accountStore;
+    private final TransactionStore transactionStore;
+    @Inject
+    private AccountService(AccountStore accountStore,TransactionStore transactionStore){
         this.accountStore=accountStore;
         this.transactionStore=transactionStore;
     }

@@ -16,9 +16,10 @@ import javax.ws.rs.core.MediaType;
 @Produces(MediaType.APPLICATION_JSON)
 public class FundsTransferResource {
 
-    private FundTransfers fundTransfers;
+    private final FundTransfers fundTransfers;
+
     @Inject
-    public FundsTransferResource(FundTransfers fundTransfers){
+    private FundsTransferResource(FundTransfers fundTransfers){
         this.fundTransfers=fundTransfers;
     }
 

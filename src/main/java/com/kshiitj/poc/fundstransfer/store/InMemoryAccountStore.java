@@ -3,14 +3,19 @@ package com.kshiitj.poc.fundstransfer.store;
 import com.kshiitj.poc.fundstransfer.domain.Account;
 import com.kshiitj.poc.fundstransfer.exceptions.AccountNotFoundException;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Singleton;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.*;
+import java.util.stream.Collectors;
+
 @Singleton
 public class InMemoryAccountStore implements AccountStore {
-    private ConcurrentHashMap<UUID,Account> accounts= new ConcurrentHashMap<>();
+    private final Map<UUID,Account> accounts;
+    @Inject
+    private InMemoryAccountStore(@Named("accountRepository") Map<UUID,Account> accounts){
+        this.accounts=accounts;
+    }
     @Override
     public Account getAccount(UUID accountId) throws AccountNotFoundException {
         if (this.accounts.containsKey(accountId)){
@@ -33,7 +38,7 @@ public class InMemoryAccountStore implements AccountStore {
 
     @Override
     public List<Account> getAllAccounts() {
-        return Collections.list(this.accounts.elements());
+        return this.accounts.values().parallelStream().collect(Collectors.toList());
     }
 
 

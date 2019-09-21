@@ -7,13 +7,16 @@ import com.kshiitj.poc.fundstransfer.exceptions.NoAccountAvailableException;
 import com.kshiitj.poc.fundstransfer.exceptions.NoTransactionsAvailableException;
 import com.kshiitj.poc.fundstransfer.service.AccountService;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
-
+@Singleton
 public class Accounts {
-    private AccountService accountService;
-    public Accounts(AccountService accountService){
+    private final AccountService accountService;
+    @Inject
+    private Accounts(AccountService accountService){
         this.accountService=accountService;
     }
     public UUID createAccount(BigDecimal initialBalance) throws AccountNotFoundException {

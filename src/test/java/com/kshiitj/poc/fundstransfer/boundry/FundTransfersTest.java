@@ -1,17 +1,26 @@
 package com.kshiitj.poc.fundstransfer.boundry;
 
+import com.google.inject.Guice;
+import com.kshiitj.poc.fundstransfer.FundsTransferApplication;
+import com.kshiitj.poc.fundstransfer.FundsTransferConfiguration;
 import com.kshiitj.poc.fundstransfer.domain.Account;
 import com.kshiitj.poc.fundstransfer.domain.FundsTransferResponse;
 import com.kshiitj.poc.fundstransfer.domain.TransferRequest;
 import com.kshiitj.poc.fundstransfer.exceptions.AccountNotFoundException;
 import com.kshiitj.poc.fundstransfer.exceptions.FundsTransferException;
+import com.kshiitj.poc.fundstransfer.guice.AccountModule;
 import com.kshiitj.poc.fundstransfer.service.AccountService;
 import com.kshiitj.poc.fundstransfer.store.AccountStore;
 import com.kshiitj.poc.fundstransfer.store.InMemoryAccountStore;
 import com.kshiitj.poc.fundstransfer.store.InMemoryTransactionsStore;
 import org.junit.BeforeClass;
+import org.junit.ClassRule;
+import org.junit.Rule;
 import org.junit.Test;
+import ru.vyarus.dropwizard.guice.test.GuiceyAppRule;
+import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp;
 
+import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
@@ -21,10 +30,13 @@ import java.util.concurrent.*;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsNull.notNullValue;
-
+@UseGuiceyApp(FundsTransferApplication.class)
 public class FundTransfersTest {
-
+    @ClassRule
+    public static GuiceyAppRule<FundsTransferConfiguration> RULE = new GuiceyAppRule<>(FundsTransferApplication.class, "funds-transfer.yml");
+    @Inject
     private static FundTransfers fundTransfers;
+    @Inject
     private static AccountService accountService;
     private static final Account a1=new Account();
     private static final Account a2=new Account().deposit(BigDecimal.TEN);
@@ -32,6 +44,8 @@ public class FundTransfersTest {
     private static final Account a4=new Account();
     @BeforeClass
     public static void setTestBed(){
+        /*
+        GuiceyAppRule<MyConfiguration> RULE = new GuiceyAppRule<>(MyApplication.class, "path/to/configuration.yaml");
         AccountStore accountStore=new InMemoryAccountStore();
         accountStore.saveAccount(a1);
         accountStore.saveAccount(a2);
@@ -39,7 +53,12 @@ public class FundTransfersTest {
         accountStore.saveAccount(a4);
         accountService=new AccountService(accountStore,new InMemoryTransactionsStore());
         fundTransfers=new FundTransfers(accountService);
+         */
 
+        //Guice.createInjector().injectMembers(this);
+        accountService=RULE.getBean(AccountService.class);
+        accountService.createAccount(BigDecimal.ZERO);
+        accountService.createAccount(BigDecimal.TEN);
     }
     @Test(expected = IllegalArgumentException.class)
     public void test_Fundstransfer_invalidAmount(){

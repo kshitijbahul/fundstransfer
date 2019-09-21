@@ -41,7 +41,7 @@ public class FundsTransferResourceTest {
     Account source;
 
     @ClassRule
-    public static final ResourceTestRule resource = ResourceTestRule.builder().addResource(new FundsTransferResource(fundTransfers)).build();
+    public static final ResourceTestRule resource = ResourceTestRule.builder().addResource(FundsTransferResource.class).build();
 
     @Before
     public void setUpTest(){

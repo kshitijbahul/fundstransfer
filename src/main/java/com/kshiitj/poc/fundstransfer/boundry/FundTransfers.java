@@ -7,10 +7,14 @@ import com.kshiitj.poc.fundstransfer.exceptions.FundsTransferException;
 import com.kshiitj.poc.fundstransfer.exceptions.InsufficientBalanceException;
 import com.kshiitj.poc.fundstransfer.service.AccountService;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+@Singleton
 public class FundTransfers {
 
-    private AccountService accountService;
-
+    private final AccountService accountService;
+    @Inject
     public FundTransfers(AccountService accountService){
         this.accountService=accountService;
     }

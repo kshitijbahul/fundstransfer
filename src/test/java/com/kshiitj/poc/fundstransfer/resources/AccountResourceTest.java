@@ -41,7 +41,7 @@ public class AccountResourceTest {
         reset(accounts);
     }
     @ClassRule
-    public static final ResourceTestRule resource = ResourceTestRule.builder().addResource(new AccountResource(accounts)).addProvider(IllegalArgumentExceptionMapper.class).addProvider(NoAccountAvailableException.class).build();
+    public static final ResourceTestRule resource = ResourceTestRule.builder().addResource(AccountResource.class).addProvider(IllegalArgumentExceptionMapper.class).addProvider(NoAccountAvailableException.class).build();
 
     @Test
     public void test_resourceAvailable() throws AccountNotFoundException {
