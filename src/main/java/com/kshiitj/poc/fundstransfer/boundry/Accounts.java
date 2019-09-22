@@ -1,10 +1,11 @@
 package com.kshiitj.poc.fundstransfer.boundry;
 
 import com.kshiitj.poc.fundstransfer.domain.Account;
+import com.kshiitj.poc.fundstransfer.exceptions.AccountNotFoundException;
 import com.kshiitj.poc.fundstransfer.exceptions.NoAccountAvailableException;
 import com.kshiitj.poc.fundstransfer.service.AccountService;
 
-import javax.security.auth.login.AccountNotFoundException;
+
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
@@ -21,5 +22,9 @@ public class Accounts {
 
     public List<Account> getAccounts() {
         return this.accountService.getAccounts().orElseThrow(()->new NoAccountAvailableException());
+    }
+
+    public Account getAccount(UUID accountId) throws AccountNotFoundException {
+        return this.accountService.getAccount(accountId);
     }
 }

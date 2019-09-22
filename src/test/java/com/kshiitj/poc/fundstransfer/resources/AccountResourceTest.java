@@ -5,12 +5,14 @@ import com.kshiitj.poc.fundstransfer.domain.Account;
 import com.kshiitj.poc.fundstransfer.domain.AccountCreationRequest;
 import com.kshiitj.poc.fundstransfer.domain.AccountCreationResponse;
 import com.kshiitj.poc.fundstransfer.exceptionmappers.IllegalArgumentExceptionMapper;
+import com.kshiitj.poc.fundstransfer.exceptions.AccountNotFoundException;
 import com.kshiitj.poc.fundstransfer.exceptions.NoAccountAvailableException;
 import io.dropwizard.testing.junit.ResourceTestRule;
 import org.eclipse.jetty.http.HttpStatus;
 import org.junit.After;
 import org.junit.ClassRule;
 import org.junit.Test;
+
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.GenericType;
@@ -48,6 +50,16 @@ public class AccountResourceTest {
         //assertThat(resp.readEntity(AccountCreationResponse.class),instanceOf(AccountCreationResponse.class));
         AccountCreationResponse creationResponse= resp.readEntity(AccountCreationResponse.class);
         assertThat(creationResponse.getAccountId(),instanceOf(UUID.class));
+    }
+    @Test
+    public void test_getAccount() throws AccountNotFoundException {
+        UUID accountId=UUID.randomUUID();
+        given(accounts.getAccount(accountId)).willReturn(new Account(BigDecimal.ZERO));
+        Response resp=resource.target(String.format("/account/%s",accountId)).request(MediaType.APPLICATION_JSON_TYPE).get();
+        assertThat(resp.getStatus(),equalTo(HttpStatus.OK_200));
+        //assertThat(resp.readEntity(AccountCreationResponse.class),instanceOf(AccountCreationResponse.class));
+        Account account= resp.readEntity(Account.class);
+        assertThat(account.getId(),instanceOf(UUID.class));
     }
     @Test
     public void test_accountCreation_invalidBalance(){
