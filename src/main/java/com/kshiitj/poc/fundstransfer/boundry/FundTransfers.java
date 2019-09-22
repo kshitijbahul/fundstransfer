@@ -4,6 +4,7 @@ import com.kshiitj.poc.fundstransfer.domain.FundsTransferResponse;
 import com.kshiitj.poc.fundstransfer.domain.TransferRequest;
 import com.kshiitj.poc.fundstransfer.exceptions.AccountNotFoundException;
 import com.kshiitj.poc.fundstransfer.exceptions.FundsTransferException;
+import com.kshiitj.poc.fundstransfer.exceptions.InsufficientBalanceException;
 import com.kshiitj.poc.fundstransfer.service.AccountService;
 
 public class FundTransfers {
@@ -20,17 +21,17 @@ public class FundTransfers {
             try{
                 accountService.deposit(transferRequest.getToAccountId(),transferRequest.getAmount());
                 return new FundsTransferResponse(transferRequest.getRequestId(), FundsTransferResponse.Status.SUCCESS);
-            }catch (RuntimeException | AccountNotFoundException exc){
+            }catch (IllegalStateException | AccountNotFoundException exc){
                 try{
                     accountService.deposit(transferRequest.getFromAccountId(),transferRequest.getAmount());
                     throw new FundsTransferException(FundsTransferResponse.Status.CREDIT_FAILED,exc.getMessage());
                     //return new FundsTransferResponse(transferRequest.getRequestId(),FundsTransferResponse.Status.CREDIT_FAILED,exc.getMessage());
-                }catch (RuntimeException |AccountNotFoundException e){
+                }catch (IllegalStateException |AccountNotFoundException e){
                     throw new FundsTransferException(FundsTransferResponse.Status.REVERSAL_FAILED,e.getMessage());
                     //return new FundsTransferResponse(transferRequest.getRequestId(),FundsTransferResponse.Status.REVERSAL_FAILED,e.getMessage());
                 }
             }
-        }catch (RuntimeException | AccountNotFoundException excp){
+        }catch (InsufficientBalanceException | AccountNotFoundException excp){
             //nothing to do
             throw new FundsTransferException(FundsTransferResponse.Status.DEBIT_FAILED,excp.getMessage());
             //return new FundsTransferResponse(transferRequest.getRequestId(),FundsTransferResponse.Status.DEBIT_FAILED,excp.getMessage());

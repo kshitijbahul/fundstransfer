@@ -10,6 +10,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class FundsTransferResponse {
     public enum Status{
+        INVALID_TRANSFER_REQUEST("Invalid Transfer Request"),
         SUCCESS("Transfer Successful"),
         DEBIT_FAILED("Source account debit failed"),
         CREDIT_FAILED("Could not credit account"),

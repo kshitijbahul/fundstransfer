@@ -11,13 +11,12 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 public class TransferRequest {
-    private UUID requestId;
+    private UUID requestId=UUID.randomUUID();
     private UUID toAccountId;
     private UUID fromAccountId;
     private BigDecimal amount;
 
     public TransferRequest(UUID fromAccountId,UUID toAccountId,BigDecimal amount){
-        this.requestId=UUID.randomUUID();
         this.toAccountId=toAccountId;
         this.fromAccountId=fromAccountId;
         this.amount=amount;

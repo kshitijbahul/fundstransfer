@@ -15,7 +15,6 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 @Singleton
 public class AccountService {
-    private static Lock transactionLock= new ReentrantLock();
     private AccountStore accountStore;
 
     @Inject

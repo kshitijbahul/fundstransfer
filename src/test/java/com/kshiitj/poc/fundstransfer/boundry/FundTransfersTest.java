@@ -141,14 +141,19 @@ public class FundTransfersTest {
         } catch (InterruptedException | ExecutionException | AccountNotFoundException e) {
             e.printStackTrace();
         }
-        /*
-        Future<FundsTransferResponse> fundsTransferResponseFutureT1=executorService.submit(()->{
-            return fundTransfers.transfer(transferRequest);
-        });
-        Future<FundsTransferResponse> fundsTransferResponseFutureT2=executorService.submit(()->{
-            return fundTransfers.transfer(transferRequest2);
-        });
-         */
-
+    }
+    @Test
+    public void test_creditFailed_Transaction_reversal(){
+        BigDecimal fromBalance=a2.getBalance();
+        TransferRequest transferRequest=new TransferRequest(a2.getId(),UUID.randomUUID(),fromBalance);
+        try{
+            FundsTransferResponse resp=fundTransfers.transfer(transferRequest);
+        }catch (FundsTransferException e){
+            try {
+                assertThat(accountService.getAccount(a2.getId()).getBalance(),equalTo(fromBalance));
+            } catch (AccountNotFoundException ex) {
+                e.printStackTrace();
+            }
+        }
     }
 }

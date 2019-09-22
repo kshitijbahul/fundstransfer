@@ -57,7 +57,7 @@ public class Account {
                 }
             }
         }else{
-            throw new InsufficientBalanceException(this.id,this.balance);
+            throw new InsufficientBalanceException(this.id,amount);
         }
     }
     public void deposit(BigDecimal amount) {
