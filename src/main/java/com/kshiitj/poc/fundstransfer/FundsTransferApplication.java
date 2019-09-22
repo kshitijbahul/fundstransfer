@@ -1,16 +1,11 @@
 package com.kshiitj.poc.fundstransfer;
 
-import com.kshiitj.poc.fundstransfer.boundry.Accounts;
-import com.kshiitj.poc.fundstransfer.boundry.FundTransfers;
+import com.kshiitj.poc.fundstransfer.exceptionmappers.FundsTransferExceptionMapper;
 import com.kshiitj.poc.fundstransfer.exceptionmappers.IllegalArgumentExceptionMapper;
 import com.kshiitj.poc.fundstransfer.exceptionmappers.NoAccountAvailableExceptionMapper;
-import com.kshiitj.poc.fundstransfer.exceptionmappers.FundsTransferExceptionMapper;
 import com.kshiitj.poc.fundstransfer.guice.AccountModule;
 import com.kshiitj.poc.fundstransfer.resources.AccountResource;
 import com.kshiitj.poc.fundstransfer.resources.FundsTransferResource;
-import com.kshiitj.poc.fundstransfer.service.AccountService;
-import com.kshiitj.poc.fundstransfer.store.InMemoryAccountStore;
-import com.kshiitj.poc.fundstransfer.store.InMemoryTransactionsStore;
 
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
@@ -24,7 +19,8 @@ public class FundsTransferApplication extends Application<FundsTransferConfigura
     @Override
     public void initialize(Bootstrap<FundsTransferConfiguration> bootstrap){
         bootstrap.addBundle(GuiceBundle.builder()
-                .enableAutoConfig(getClass().getPackage().getName())
+                .printDiagnosticInfo()
+                .enableAutoConfig("com.kshiitj.poc.fundstransfer")
                 .modules(new AccountModule())
                 .build()
         );

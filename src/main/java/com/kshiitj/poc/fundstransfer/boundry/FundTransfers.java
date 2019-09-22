@@ -15,7 +15,7 @@ public class FundTransfers {
 
     private final AccountService accountService;
     @Inject
-    public FundTransfers(AccountService accountService){
+    FundTransfers(AccountService accountService){
         this.accountService=accountService;
     }
     public FundsTransferResponse transfer(TransferRequest transferRequest){

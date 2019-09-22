@@ -16,7 +16,7 @@ import java.util.UUID;
 public class Accounts {
     private final AccountService accountService;
     @Inject
-    private Accounts(AccountService accountService){
+    Accounts(AccountService accountService){
         this.accountService=accountService;
     }
     public UUID createAccount(BigDecimal initialBalance) throws AccountNotFoundException {

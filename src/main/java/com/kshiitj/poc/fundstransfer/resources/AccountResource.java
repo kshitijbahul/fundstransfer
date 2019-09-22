@@ -25,7 +25,7 @@ import java.util.stream.IntStream;
 public class AccountResource {
     private final Accounts accounts;
     @Inject
-    private AccountResource(Accounts accounts){
+    AccountResource(Accounts accounts){
         this.accounts=accounts;
     }
     @POST

@@ -15,6 +15,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -23,13 +24,13 @@ import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 
 
 public class AccountServiceTest {
-    @Inject
+    //@Inject
     static AccountService accountService;
 
     static Account newAccount;
     @BeforeClass
     public static void testBench(){
-        //accountService=new AccountService();
+        accountService=new AccountService(new InMemoryAccountStore(new ConcurrentHashMap<>()));
         newAccount=accountService.createAccount(BigDecimal.ZERO);
     }
 
