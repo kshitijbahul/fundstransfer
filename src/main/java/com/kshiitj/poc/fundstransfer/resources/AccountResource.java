@@ -6,13 +6,8 @@ import com.kshiitj.poc.fundstransfer.domain.AccountCreationResponse;
 import com.kshiitj.poc.fundstransfer.exceptions.AccountNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 
-
 import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.PathParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.math.BigDecimal;

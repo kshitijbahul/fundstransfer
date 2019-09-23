@@ -1,7 +1,8 @@
 package com.kshiitj.poc.fundstransfer.domain;
 
 import com.kshiitj.poc.fundstransfer.exceptions.InsufficientBalanceException;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.NonNull;
 
 import java.math.BigDecimal;
 import java.util.UUID;

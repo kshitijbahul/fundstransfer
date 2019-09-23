@@ -7,21 +7,15 @@ import com.kshiitj.poc.fundstransfer.domain.Account;
 import com.kshiitj.poc.fundstransfer.domain.Transaction;
 import com.kshiitj.poc.fundstransfer.exceptions.AccountNotFoundException;
 import com.kshiitj.poc.fundstransfer.exceptions.InsufficientBalanceException;
-import com.kshiitj.poc.fundstransfer.store.InMemoryAccountStore;
-
-import org.junit.*;
-import org.mockito.Mock;
-import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup;
+import org.junit.BeforeClass;
+import org.junit.ClassRule;
+import org.junit.Test;
 import ru.vyarus.dropwizard.guice.test.GuiceyAppRule;
-import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp;
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp;
 
-import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -38,7 +32,11 @@ public class AccountServiceTest {
     @BeforeClass
     public static void testBench(){
         accountService=RULE.getBean(AccountService.class);
-        newAccount=RULE.getBean(AccountService.class).createAccount(BigDecimal.ZERO);
+        try {
+            newAccount=RULE.getBean(AccountService.class).createAccount(BigDecimal.ZERO);
+        } catch (AccountNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
@@ -92,10 +90,4 @@ public class AccountServiceTest {
     public void test_withdrawFromNonExistingAccount() throws AccountNotFoundException {
         accountService.withdraw(UUID.randomUUID(),BigDecimal.valueOf(1000));
     }
-
-
-
-
-
-
 }

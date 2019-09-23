@@ -3,8 +3,6 @@ package com.kshiitj.poc.fundstransfer.resources;
 import com.kshiitj.poc.fundstransfer.boundry.FundTransfers;
 import com.kshiitj.poc.fundstransfer.domain.FundsTransferResponse;
 import com.kshiitj.poc.fundstransfer.domain.TransferRequest;
-import com.kshiitj.poc.fundstransfer.exceptions.AccountNotFoundException;
-import com.kshiitj.poc.fundstransfer.exceptions.InsufficientBalanceException;
 
 import javax.inject.Inject;
 import javax.ws.rs.POST;

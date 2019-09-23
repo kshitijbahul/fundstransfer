@@ -1,7 +1,7 @@
 package com.kshiitj.poc.fundstransfer.domain;
 
-import lombok.*;
-import org.joda.time.DateTime;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.HashSet;

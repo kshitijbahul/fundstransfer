@@ -1,6 +1,5 @@
 package com.kshiitj.poc.fundstransfer.guice;
 
-import com.google.common.collect.Maps;
 import com.google.inject.AbstractModule;
 import com.google.inject.TypeLiteral;
 import com.google.inject.name.Names;
@@ -11,7 +10,6 @@ import com.kshiitj.poc.fundstransfer.store.InMemoryAccountStore;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 public class AccountModule extends AbstractModule {
     @Override

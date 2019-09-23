@@ -1,10 +1,5 @@
 package com.kshiitj.poc.fundstransfer.resources;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.google.inject.util.Modules;
-import com.kshiitj.poc.fundstransfer.FundsTransferApplication;
-import com.kshiitj.poc.fundstransfer.FundsTransferConfiguration;
 import com.kshiitj.poc.fundstransfer.boundry.Accounts;
 import com.kshiitj.poc.fundstransfer.domain.Account;
 import com.kshiitj.poc.fundstransfer.domain.AccountCreationRequest;
@@ -15,11 +10,9 @@ import com.kshiitj.poc.fundstransfer.exceptions.NoAccountAvailableException;
 import com.kshiitj.poc.fundstransfer.exceptions.NoTransactionsAvailableException;
 import io.dropwizard.testing.junit.ResourceTestRule;
 import org.eclipse.jetty.http.HttpStatus;
-import org.junit.*;
-import org.junit.rules.RuleChain;
-import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup;
-import ru.vyarus.dropwizard.guice.test.GuiceyAppRule;
-
+import org.junit.After;
+import org.junit.ClassRule;
+import org.junit.Test;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.GenericType;
@@ -34,7 +27,6 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.mockito.ArgumentMatchers.isNotNull;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
@@ -46,8 +38,6 @@ public class AccountResourceTest {
     public void after(){
         reset(accounts);
     }
-
-
 
     @ClassRule
     public static final ResourceTestRule resource = ResourceTestRule.builder().addResource(new AccountResource(accounts)).addProvider(IllegalArgumentExceptionMapper.class).addProvider(NoAccountAvailableException.class).build();
