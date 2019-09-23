@@ -1,14 +1,20 @@
 package com.kshiitj.poc.fundstransfer.service;
 
 
+import com.kshiitj.poc.fundstransfer.FundsTransferApplication;
+import com.kshiitj.poc.fundstransfer.FundsTransferConfiguration;
 import com.kshiitj.poc.fundstransfer.domain.Account;
 import com.kshiitj.poc.fundstransfer.domain.Transaction;
 import com.kshiitj.poc.fundstransfer.exceptions.AccountNotFoundException;
 import com.kshiitj.poc.fundstransfer.exceptions.InsufficientBalanceException;
 import com.kshiitj.poc.fundstransfer.store.InMemoryAccountStore;
-import com.kshiitj.poc.fundstransfer.store.InMemoryTransactionsStore;
-import org.junit.BeforeClass;
-import org.junit.Test;
+
+import org.junit.*;
+import org.mockito.Mock;
+import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup;
+import ru.vyarus.dropwizard.guice.test.GuiceyAppRule;
+import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp;
+import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp;
 
 import javax.inject.Inject;
 import java.math.BigDecimal;
@@ -24,14 +30,15 @@ import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 
 
 public class AccountServiceTest {
-    //@Inject
-    static AccountService accountService;
+    public static AccountService accountService;
+    @ClassRule
+    public static GuiceyAppRule<FundsTransferConfiguration> RULE = new GuiceyAppRule<>(FundsTransferApplication.class, null);
 
     static Account newAccount;
     @BeforeClass
     public static void testBench(){
-        accountService=new AccountService(new InMemoryAccountStore(new ConcurrentHashMap<>()));
-        newAccount=accountService.createAccount(BigDecimal.ZERO);
+        accountService=RULE.getBean(AccountService.class);
+        newAccount=RULE.getBean(AccountService.class).createAccount(BigDecimal.ZERO);
     }
 
     @Test

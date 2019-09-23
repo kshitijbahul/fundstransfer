@@ -19,7 +19,7 @@ public class FundsTransferResource {
     private final FundTransfers fundTransfers;
 
     @Inject
-    private FundsTransferResource(FundTransfers fundTransfers){
+    FundsTransferResource(FundTransfers fundTransfers){
         this.fundTransfers=fundTransfers;
     }
 

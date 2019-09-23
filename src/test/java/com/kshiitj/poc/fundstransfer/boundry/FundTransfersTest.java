@@ -30,7 +30,7 @@ import java.util.concurrent.*;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsNull.notNullValue;
-@UseGuiceyApp(FundsTransferApplication.class)
+
 public class FundTransfersTest {
     //@Inject
     private static FundTransfers fundTransfers;
@@ -41,21 +41,21 @@ public class FundTransfersTest {
     private static final Account a3=new Account().deposit(BigDecimal.TEN);
     private static final Account a4=new Account();
 
+    @ClassRule
+    public static GuiceyAppRule<FundsTransferConfiguration> RULE=new GuiceyAppRule<>(FundsTransferApplication.class, null);
     @BeforeClass
     public static void setTestBed(){
 
-        AccountStore accountStore=new InMemoryAccountStore(accountsRep);
+        //AccountStore accountStore=new InMemoryAccountStore(accountsRep);
+
+        AccountStore accountStore=RULE.getBean(AccountStore.class);
+        fundTransfers=RULE.getBean(FundTransfers.class);
         accountStore.saveAccount(a1);
         accountStore.saveAccount(a2);
         accountStore.saveAccount(a3);
         accountStore.saveAccount(a4);
-        accountService=new AccountService(accountStore,new InMemoryTransactionsStore());
+        accountService=RULE.getBean(AccountService.class);
         fundTransfers=new FundTransfers(accountService);
-
-        //Guice.createInjector().injectMembers(this);
-//        accountService=RULE.getBean(AccountService.class);
-//        accountService.createAccount(BigDecimal.ZERO);
-//        accountService.createAccount(BigDecimal.TEN);
     }
     @Test(expected = IllegalArgumentException.class)
     public void test_Fundstransfer_invalidAmount(){

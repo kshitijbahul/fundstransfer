@@ -36,10 +36,13 @@ public class FundsTransferApplication extends Application<FundsTransferConfigura
         //final FundsTransferResource fundsTransfer=new FundsTransferResource();
         //final AccountResource accountResource=new AccountResource(new Accounts(accountService));
 
+        /*
         environment.jersey().register(FundsTransferResource.class);
         environment.jersey().register(AccountResource.class);
         environment.jersey().register(IllegalArgumentExceptionMapper.class);
         environment.jersey().register(NoAccountAvailableExceptionMapper.class);
         environment.jersey().register(FundsTransferExceptionMapper.class);
+
+         */
     }
 }

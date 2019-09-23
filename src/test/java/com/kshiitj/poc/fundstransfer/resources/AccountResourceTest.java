@@ -3,6 +3,7 @@ package com.kshiitj.poc.fundstransfer.resources;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.util.Modules;
+import com.kshiitj.poc.fundstransfer.FundsTransferApplication;
 import com.kshiitj.poc.fundstransfer.FundsTransferConfiguration;
 import com.kshiitj.poc.fundstransfer.boundry.Accounts;
 import com.kshiitj.poc.fundstransfer.domain.Account;
@@ -14,11 +15,9 @@ import com.kshiitj.poc.fundstransfer.exceptions.NoAccountAvailableException;
 import com.kshiitj.poc.fundstransfer.exceptions.NoTransactionsAvailableException;
 import io.dropwizard.testing.junit.ResourceTestRule;
 import org.eclipse.jetty.http.HttpStatus;
-import org.junit.After;
-import org.junit.ClassRule;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.rules.RuleChain;
+import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup;
 import ru.vyarus.dropwizard.guice.test.GuiceyAppRule;
 
 
@@ -43,24 +42,20 @@ import static org.mockito.Mockito.reset;
 public class AccountResourceTest {
 
     private static Accounts accounts=mock(Accounts.class);
-    //@After
+    @After
     public void after(){
         reset(accounts);
     }
 
-    //Injector injector= Guice.createInjector(Modules.override(new Application))
 
-    //@ClassRule
-    public static final ResourceTestRule resource = ResourceTestRule.builder().addResource(AccountResource.class).addProvider(IllegalArgumentExceptionMapper.class).addProvider(NoAccountAvailableException.class).build();
-    //@Rule
-    //GuiceyAppRule<FundsTransferConfiguration> RULE = new GuiceyAppRule<>(AccountResource.class, null);
 
+    @ClassRule
+    public static final ResourceTestRule resource = ResourceTestRule.builder().addResource(new AccountResource(accounts)).addProvider(IllegalArgumentExceptionMapper.class).addProvider(NoAccountAvailableException.class).build();
     @Test
-    public void test_resourceAvailable() throws AccountNotFoundException {
+        public void test_resourceAvailable() throws AccountNotFoundException {
         given(accounts.createAccount(BigDecimal.valueOf(1))).willReturn(UUID.randomUUID());
         Response resp=resource.target("/account").request(MediaType.APPLICATION_JSON_TYPE).post(Entity.json(new AccountCreationRequest(BigDecimal.valueOf(1))));
         assertThat(resp.getStatus(),equalTo(HttpStatus.CREATED_201));
-        //assertThat(resp.readEntity(AccountCreationResponse.class),instanceOf(AccountCreationResponse.class));
         AccountCreationResponse creationResponse= resp.readEntity(AccountCreationResponse.class);
         assertThat(creationResponse.getAccountId(),instanceOf(UUID.class));
     }
@@ -82,7 +77,7 @@ public class AccountResourceTest {
         System.out.println(resp);
         assertThat(resp.getStatus(),equalTo(HttpStatus.BAD_REQUEST_400));
     }
-    //@Test
+    @Test
     public void test_accountCreation_novalue(){
         //given(accounts.createAccount(BigDecimal.valueOf(-5))).willThrow(IllegalArgumentException.class);
         String request= "\"initialBalance\":abc";
@@ -90,7 +85,7 @@ public class AccountResourceTest {
         System.out.println(resp);
         assertThat(resp.getStatus(),equalTo(HttpStatus.BAD_REQUEST_400));
     }
-    //@Test
+    @Test
     public void test_getAllAccounts(){
 
         given(accounts.getAccounts()).willReturn(Arrays.asList(new Account(),new Account()));
@@ -100,7 +95,7 @@ public class AccountResourceTest {
         //assertThat(accounts,isNotNull());
         assertThat(accounts,hasSize(2));
     }
-    //@Test
+    @Test
     public void test_getAllAccounts_expectException(){
         given(accounts.getAccounts()).willThrow(new NoAccountAvailableException());
         Response response=resource.target("/account").request().get();

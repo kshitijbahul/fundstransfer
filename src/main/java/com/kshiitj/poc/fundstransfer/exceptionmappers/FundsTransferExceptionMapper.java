@@ -5,7 +5,9 @@ import com.kshiitj.poc.fundstransfer.exceptions.FundsTransferException;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
+import javax.ws.rs.ext.Provider;
 
+@Provider
 public class FundsTransferExceptionMapper implements ExceptionMapper<FundsTransferException> {
     @Override
     public Response toResponse(FundsTransferException e) {
