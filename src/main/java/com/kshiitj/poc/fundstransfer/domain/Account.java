@@ -67,7 +67,7 @@ public class Account {
             }
         return this;
         }else {
-            throw new IllegalStateException(String.format("Account %s is locked for operation.Debit not possible",this.id));
+            throw new IllegalStateException(String.format("Account %s is locked for operation.Credit not possible",this.id));
         }
     }
 }
