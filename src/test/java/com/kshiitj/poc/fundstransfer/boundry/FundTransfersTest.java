@@ -8,6 +8,7 @@ import com.kshiitj.poc.fundstransfer.exceptions.FundsTransferException;
 import com.kshiitj.poc.fundstransfer.service.AccountService;
 import com.kshiitj.poc.fundstransfer.store.AccountStore;
 import com.kshiitj.poc.fundstransfer.store.InMemoryAccountStore;
+import com.kshiitj.poc.fundstransfer.store.InMemoryTransactionsStore;
 import org.eclipse.jetty.util.thread.ThreadPool;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -27,10 +28,10 @@ public class FundTransfersTest {
 
     private static FundTransfers fundTransfers;
     private static AccountService accountService;
-    private static final Account a1=new Account(BigDecimal.ZERO);
-    private static final Account a2=new Account(BigDecimal.TEN);
-    private static final Account a3=new Account(BigDecimal.TEN);
-    private static final Account a4=new Account(BigDecimal.ZERO);
+    private static final Account a1=new Account();
+    private static final Account a2=new Account().deposit(BigDecimal.TEN);
+    private static final Account a3=new Account().deposit(BigDecimal.TEN);
+    private static final Account a4=new Account();
     @BeforeClass
     public static void setTestBed(){
         AccountStore accountStore=new InMemoryAccountStore();
@@ -38,7 +39,7 @@ public class FundTransfersTest {
         accountStore.saveAccount(a2);
         accountStore.saveAccount(a3);
         accountStore.saveAccount(a4);
-        accountService=new AccountService(accountStore);
+        accountService=new AccountService(accountStore,new InMemoryTransactionsStore());
         fundTransfers=new FundTransfers(accountService);
 
     }

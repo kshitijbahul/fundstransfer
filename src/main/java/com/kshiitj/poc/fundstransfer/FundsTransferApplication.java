@@ -9,6 +9,7 @@ import com.kshiitj.poc.fundstransfer.resources.AccountResource;
 import com.kshiitj.poc.fundstransfer.resources.FundsTransferResource;
 import com.kshiitj.poc.fundstransfer.service.AccountService;
 import com.kshiitj.poc.fundstransfer.store.InMemoryAccountStore;
+import com.kshiitj.poc.fundstransfer.store.InMemoryTransactionsStore;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Environment;
 
@@ -22,7 +23,7 @@ public class FundsTransferApplication extends Application<FundsTransferConfigura
         return "funds-transfer.yml";
     }
     public void run(FundsTransferConfiguration fundsTransferConfiguration, Environment environment) throws Exception {
-        final AccountService accountService=new AccountService(new InMemoryAccountStore());
+        final AccountService accountService=new AccountService(new InMemoryAccountStore(),new InMemoryTransactionsStore());
         final FundTransfers fundTransfers=new FundTransfers(accountService);
         final FundsTransferResource fundsTransfer=new FundsTransferResource(fundTransfers);
         final AccountResource accountResource=new AccountResource(new Accounts(accountService));

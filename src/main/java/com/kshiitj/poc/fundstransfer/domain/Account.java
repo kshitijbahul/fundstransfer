@@ -11,16 +11,17 @@ import java.util.concurrent.locks.ReentrantLock;
 
 
 @AllArgsConstructor
-//@RequiredArgsConstructor()
-@NoArgsConstructor
 public class Account {
     @NonNull
     private UUID id;
-    private BigDecimal balance=BigDecimal.ZERO;
+    private BigDecimal balance;
     //private ReentrantReadWriteLock reentrantLock=new ReentrantReadWriteLock();
     private Lock lock =new ReentrantLock();
     //private Lock writeLock=reentrantLock.writeLock();
-
+    public Account(){
+        this.id=UUID.randomUUID();
+        this.balance=BigDecimal.ZERO;
+    }
     public UUID getId() {
         return id;
     }
@@ -43,11 +44,11 @@ public class Account {
         return this.getBalance().subtract(amount).compareTo(BigDecimal.ZERO) >=0;
     }
 
-    public Account (BigDecimal initialBalance) {
+    /*public Account (BigDecimal initialBalance) {
         this.id=UUID.randomUUID();
-        this.balance=initialBalance;
-    }
-    public void withdraw(BigDecimal amount) {
+        this.deposit(initialBalance);
+    }*/
+    public Account withdraw(BigDecimal amount) {
         if(accountHasBalance(amount)){
             if(this.lock.tryLock()){
                 try{
@@ -56,21 +57,21 @@ public class Account {
                     this.lock.unlock();
                 }
             }
+        return this;
         }else{
             throw new InsufficientBalanceException(this.id,amount);
         }
     }
-    public void deposit(BigDecimal amount) {
+    public Account deposit(BigDecimal amount) {
         if(this.lock.tryLock()){
             try{
                 this.balance=this.getBalance().add(amount);
             }finally {
                 this.lock.unlock();
             }
-
+        return this;
         }else {
-            new IllegalStateException(String.format("Account %s is locked for operation.Debit not possible",this.id));
+            throw new IllegalStateException(String.format("Account %s is locked for operation.Debit not possible",this.id));
         }
-
     }
 }

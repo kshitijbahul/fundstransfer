@@ -43,8 +43,7 @@ public class FundsTransferResourceTest {
 
     @Before
     public void setUpTest(){
-        //accountService=new AccountService();
-        source=new Account(BigDecimal.valueOf(100));
+        source=new Account().deposit(BigDecimal.valueOf(100));
     }
     @After
     public void cleanUpTest(){
