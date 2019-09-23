@@ -8,26 +8,28 @@ import com.kshiitj.poc.fundstransfer.domain.TransferRequest;
 import com.kshiitj.poc.fundstransfer.exceptions.AccountNotFoundException;
 import com.kshiitj.poc.fundstransfer.exceptions.FundsTransferException;
 import com.kshiitj.poc.fundstransfer.exceptions.InsufficientBalanceException;
-import com.kshiitj.poc.fundstransfer.service.AccountService;
 import io.dropwizard.testing.junit.ResourceTestRule;
 import org.eclipse.jetty.http.HttpStatus;
 import org.eclipse.jetty.server.Server;
-import org.joda.time.DateTime;
-import org.junit.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.ClassRule;
+import org.junit.Test;
 import org.mockito.Mock;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.util.UUID;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.reset;
 
 public class FundsTransferResourceTest {
     private static Server server;

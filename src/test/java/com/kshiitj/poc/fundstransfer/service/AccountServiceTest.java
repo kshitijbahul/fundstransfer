@@ -9,7 +9,6 @@ import com.kshiitj.poc.fundstransfer.store.InMemoryAccountStore;
 import com.kshiitj.poc.fundstransfer.store.InMemoryTransactionsStore;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.mockito.Mock;
 
 import java.math.BigDecimal;
 import java.util.List;

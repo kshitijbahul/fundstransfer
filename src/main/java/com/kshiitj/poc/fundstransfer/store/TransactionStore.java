@@ -1,6 +1,5 @@
 package com.kshiitj.poc.fundstransfer.store;
 
-import com.kshiitj.poc.fundstransfer.domain.Account;
 import com.kshiitj.poc.fundstransfer.domain.Transaction;
 import com.kshiitj.poc.fundstransfer.exceptions.AccountNotFoundException;
 import com.kshiitj.poc.fundstransfer.exceptions.TransactionNotFoundException;

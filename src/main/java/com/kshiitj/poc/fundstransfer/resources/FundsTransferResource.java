@@ -14,7 +14,6 @@ import javax.ws.rs.core.MediaType;
 
 @Path("/funds/transfer")
 @Produces(MediaType.APPLICATION_JSON)
-//@Log4j2
 public class FundsTransferResource {
 
     private FundTransfers fundTransfers;
@@ -24,7 +23,7 @@ public class FundsTransferResource {
     }
 
     @POST
-    public FundsTransferResponse transferMoney(TransferRequest request) throws AccountNotFoundException, InsufficientBalanceException {
+    public FundsTransferResponse transferMoney(TransferRequest request)  {
         return fundTransfers.transfer(request);
     }
 }

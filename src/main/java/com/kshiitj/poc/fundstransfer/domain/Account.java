@@ -15,9 +15,7 @@ public class Account {
     @NonNull
     private UUID id;
     private BigDecimal balance;
-    //private ReentrantReadWriteLock reentrantLock=new ReentrantReadWriteLock();
     private Lock lock =new ReentrantLock();
-    //private Lock writeLock=reentrantLock.writeLock();
     public Account(){
         this.id=UUID.randomUUID();
         this.balance=BigDecimal.ZERO;
@@ -44,10 +42,7 @@ public class Account {
         return this.getBalance().subtract(amount).compareTo(BigDecimal.ZERO) >=0;
     }
 
-    /*public Account (BigDecimal initialBalance) {
-        this.id=UUID.randomUUID();
-        this.deposit(initialBalance);
-    }*/
+
     public Account withdraw(BigDecimal amount) {
         if(accountHasBalance(amount)){
             if(this.lock.tryLock()){

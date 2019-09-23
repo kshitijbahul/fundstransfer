@@ -7,10 +7,8 @@ import com.kshiitj.poc.fundstransfer.exceptions.NoAccountAvailableException;
 import com.kshiitj.poc.fundstransfer.exceptions.NoTransactionsAvailableException;
 import com.kshiitj.poc.fundstransfer.service.AccountService;
 
-
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 public class Accounts {

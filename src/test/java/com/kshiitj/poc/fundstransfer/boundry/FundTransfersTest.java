@@ -9,7 +9,6 @@ import com.kshiitj.poc.fundstransfer.service.AccountService;
 import com.kshiitj.poc.fundstransfer.store.AccountStore;
 import com.kshiitj.poc.fundstransfer.store.InMemoryAccountStore;
 import com.kshiitj.poc.fundstransfer.store.InMemoryTransactionsStore;
-import org.eclipse.jetty.util.thread.ThreadPool;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -20,7 +19,6 @@ import java.util.UUID;
 import java.util.concurrent.*;
 
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsNull.notNullValue;
 

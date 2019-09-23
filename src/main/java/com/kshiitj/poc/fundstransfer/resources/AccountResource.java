@@ -24,7 +24,8 @@ public class AccountResource {
     }
     @POST
     public Response createAccount(AccountCreationRequest accountCreationRequest) throws AccountNotFoundException{
-            return Response.status(Response.Status.CREATED).entity(new AccountCreationResponse(this.accounts.createAccount(accountCreationRequest.getInitialBalance()))).build();
+        accountCreationRequest.verify();
+        return Response.status(Response.Status.CREATED).entity(new AccountCreationResponse(this.accounts.createAccount(accountCreationRequest.getInitialBalance()))).build();
     }
     @GET
     public Response getAllAccounts(){

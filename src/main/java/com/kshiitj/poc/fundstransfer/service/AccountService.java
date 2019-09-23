@@ -4,12 +4,9 @@ import com.kshiitj.poc.fundstransfer.domain.Account;
 import com.kshiitj.poc.fundstransfer.domain.Transaction;
 import com.kshiitj.poc.fundstransfer.domain.TransactionType;
 import com.kshiitj.poc.fundstransfer.exceptions.AccountNotFoundException;
-import com.kshiitj.poc.fundstransfer.exceptions.InsufficientBalanceException;
 import com.kshiitj.poc.fundstransfer.store.AccountStore;
 import com.kshiitj.poc.fundstransfer.store.TransactionStore;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;

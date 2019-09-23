@@ -1,13 +1,12 @@
 package com.kshiitj.poc.fundstransfer.store;
 
-import com.kshiitj.poc.fundstransfer.domain.Account;
 import com.kshiitj.poc.fundstransfer.domain.Transaction;
-import com.kshiitj.poc.fundstransfer.exceptions.AccountNotFoundException;
 import com.kshiitj.poc.fundstransfer.exceptions.TransactionNotFoundException;
 
 import javax.inject.Singleton;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Singleton
