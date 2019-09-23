@@ -15,7 +15,7 @@ public class FundsTransferApplication extends Application<FundsTransferConfigura
     public void initialize(Bootstrap<FundsTransferConfiguration> bootstrap){
         bootstrap.addBundle(GuiceBundle.builder()
                 .printDiagnosticInfo()
-                .enableAutoConfig("com.kshiitj.poc.fundstransfer")
+                .enableAutoConfig(getClass().getPackage().getName())
                 .modules(new AccountModule(),new TransactionModule())
                 .build()
         );
