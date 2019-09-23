@@ -28,6 +28,9 @@ Building and Running the Application :
     
     run : mvn clean install
     run : java -jar target/fundstransfer.jar server funds-transfer.yml
+To Run the Application straight away download the jar `fundstransfer.jar`
+
+    run : java -jar fundstransfer.jar server funds-transfer.yml
     
 Application uses port `8129` , it can be changed by changing the `port` property in `funds-transfer.yml`
     
