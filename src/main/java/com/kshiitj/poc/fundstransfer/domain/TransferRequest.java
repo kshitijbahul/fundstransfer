@@ -15,6 +15,7 @@ public class TransferRequest {
     private UUID toAccountId;
     private UUID fromAccountId;
     private BigDecimal amount;
+    private TransferRequestStatus transferRequestStatus=TransferRequestStatus.INITIATED;
 
     public TransferRequest(UUID fromAccountId,UUID toAccountId,BigDecimal amount){
         this.toAccountId=toAccountId;

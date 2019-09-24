@@ -5,7 +5,9 @@ import com.kshiitj.poc.fundstransfer.boundry.FundTransfers;
 import com.kshiitj.poc.fundstransfer.domain.Account;
 import com.kshiitj.poc.fundstransfer.domain.FundsTransferResponse;
 import com.kshiitj.poc.fundstransfer.domain.TransferRequest;
+import com.kshiitj.poc.fundstransfer.domain.TransferRequestStatus;
 import com.kshiitj.poc.fundstransfer.exceptions.FundsTransferException;
+import com.kshiitj.poc.fundstransfer.exceptions.TransactionNotFoundException;
 import io.dropwizard.testing.junit.ResourceTestRule;
 import org.eclipse.jetty.http.HttpStatus;
 import org.eclipse.jetty.server.Server;
@@ -53,35 +55,36 @@ public class FundsTransferResourceTest {
     public void testFundsTransfer()  {
 
         TransferRequest req=new TransferRequest(UUID.randomUUID(),UUID.randomUUID(),BigDecimal.valueOf(25.5));
-        given(fundTransfers.transfer(req)).willReturn(new FundsTransferResponse(UUID.randomUUID(),FundsTransferResponse.Status.SUCCESS));
+        given(fundTransfers.transfer(req)).willReturn(new FundsTransferResponse(UUID.randomUUID(), TransferRequestStatus.SUCCESS));
         Response response=resource.target("/funds/transfer").request(MediaType.APPLICATION_JSON_TYPE).post(Entity.json(req));
         assertThat(response.getStatus(), equalTo(HttpStatus.OK_200));
         System.out.println(response.getEntity().toString());
         FundsTransferResponse resp= response.readEntity(FundsTransferResponse.class);
         assertThat(resp.getTransferId(),instanceOf(UUID.class));
-        assertThat(resp.getStatus(),equalTo(FundsTransferResponse.Status.SUCCESS));
+        assertThat(resp.getStatus(),equalTo(TransferRequestStatus.SUCCESS));
         //assertThat(account.getBalance(),equalTo(source.getBalance().subtract(BigDecimal.valueOf(25.5))));
     }
     @Test
     public void test_fundsTransferFailedResponse(){
         TransferRequest req=new TransferRequest(UUID.randomUUID(),UUID.randomUUID(),BigDecimal.valueOf(25.5));
-        given(fundTransfers.transfer(req)).willThrow(new FundsTransferException(FundsTransferResponse.Status.DEBIT_FAILED,"Error from Mock"));
+        given(fundTransfers.transfer(req)).willThrow(new FundsTransferException(TransferRequestStatus.DEBIT_FAILED,"Error from Mock"));
         Response resp=resource.target("/funds/transfer").request(MediaType.APPLICATION_JSON_TYPE).post(Entity.json(req));
         assertThat(resp.getStatus(),equalTo(HttpStatus.INTERNAL_SERVER_ERROR_500));
     }
-    /*
-    BigDecimal money=BigDecimal.valueOf(25.5);
-        given(accountService.getAccount(source.getId())).willReturn(source);
-        given(accountService.createAccount(money)).willReturn(new Account(money));
-        given(accountService.deposit(source.getId(),money)).willReturn(source);
-        Account dest=accountService.createAccount(money);
-        given(accountService.getAccount(source.getId())).willReturn(source);
-        given(accountService.getAccount(dest.getId())).willReturn(source);
-        dest.setBalance(dest.getBalance().subtract(money));
-        given(accountService.deposit(dest.getId(),money)).willReturn(dest);
-        source.setBalance(source.getBalance().add(money));
-        given(accountService.withdraw(source.getId(),money)).willReturn(source);
-        System.out.println(source);
-     */
+    @Test
+    public void test_getTransactionStatus_TransactionNotFound() throws TransactionNotFoundException{
+        TransferRequest req=new TransferRequest(UUID.randomUUID(),UUID.randomUUID(),BigDecimal.valueOf(25.5));
+        given(fundTransfers.getTransactionStatus(req.getRequestId())).willThrow(new TransactionNotFoundException("Error from Mock"));
+        Response resp=resource.target(String.format("/funds/transfer/%s",req.getRequestId())).request(MediaType.APPLICATION_JSON_TYPE).get();
+        assertThat(resp.getStatus(),equalTo(HttpStatus.INTERNAL_SERVER_ERROR_500));
+    }
+    @Test
+    public void test_getTransactionStatus() throws TransactionNotFoundException{
+        TransferRequest req=new TransferRequest(UUID.randomUUID(),UUID.randomUUID(),BigDecimal.valueOf(25.5));
+        given(fundTransfers.getTransactionStatus(req.getRequestId())).willReturn(new FundsTransferResponse(req.getRequestId(),TransferRequestStatus.SUCCESS));
+        Response resp=resource.target(String.format("/funds/transfer/%s",req.getRequestId())).request(MediaType.APPLICATION_JSON_TYPE).get();
+        assertThat(resp.getStatus(),equalTo(HttpStatus.OK_200));
+        assertThat(resp.readEntity(FundsTransferResponse.class).getStatus(),equalTo(TransferRequestStatus.SUCCESS));
+    }
 
 }

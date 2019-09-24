@@ -2,6 +2,7 @@ package com.kshiitj.poc.fundstransfer;
 
 import com.kshiitj.poc.fundstransfer.guice.AccountModule;
 import com.kshiitj.poc.fundstransfer.guice.TransactionModule;
+import com.kshiitj.poc.fundstransfer.guice.TransferRequestModule;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
@@ -16,7 +17,7 @@ public class FundsTransferApplication extends Application<FundsTransferConfigura
         bootstrap.addBundle(GuiceBundle.builder()
                 .printDiagnosticInfo()
                 .enableAutoConfig(getClass().getPackage().getName())
-                .modules(new AccountModule(),new TransactionModule())
+                .modules(new AccountModule(),new TransactionModule(),new TransferRequestModule())
                 .build()
         );
     }
@@ -26,18 +27,6 @@ public class FundsTransferApplication extends Application<FundsTransferConfigura
         return "funds-transfer.yml";
     }
     public void run(FundsTransferConfiguration fundsTransferConfiguration, Environment environment) throws Exception {
-        //final AccountService accountService=new AccountService();
-        //final FundTransfers fundTransfers=new FundTransfers(accountService);
-        //final FundsTransferResource fundsTransfer=new FundsTransferResource();
-        //final AccountResource accountResource=new AccountResource(new Accounts(accountService));
 
-        /*
-        environment.jersey().register(FundsTransferResource.class);
-        environment.jersey().register(AccountResource.class);
-        environment.jersey().register(IllegalArgumentExceptionMapper.class);
-        environment.jersey().register(NoAccountAvailableExceptionMapper.class);
-        environment.jersey().register(FundsTransferExceptionMapper.class);
-
-         */
     }
 }

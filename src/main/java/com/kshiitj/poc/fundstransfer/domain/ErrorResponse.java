@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class FundsTransferFailedResponse {
-    private TransferRequestStatus error;
+public class ErrorResponse {
     private String message;
 }

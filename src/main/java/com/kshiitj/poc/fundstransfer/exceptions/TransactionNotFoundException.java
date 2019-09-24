@@ -18,6 +18,11 @@ public class TransactionNotFoundException extends Throwable {
         super(message,throwable);
         this.code=code;
     }
+
+    public TransactionNotFoundException(String message) {
+        this(500,message);
+    }
+
     public int getCode(){
         return this.code;
     }

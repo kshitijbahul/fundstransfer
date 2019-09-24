@@ -9,17 +9,6 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FundsTransferResponse {
-    public enum Status{
-        INVALID_TRANSFER_REQUEST("Invalid Transfer Request"),
-        SUCCESS("Transfer Successful"),
-        DEBIT_FAILED("Source account debit failed"),
-        CREDIT_FAILED("Could not credit account"),
-        REVERSAL_FAILED("Could not reverse failed Credit");
-        String message;
-        Status(String message){
-            this.message=message;
-        }
-    }
     private UUID transferId;
-    private Status status;
+    private TransferRequestStatus status;
 }
