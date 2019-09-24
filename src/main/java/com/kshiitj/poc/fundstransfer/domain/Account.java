@@ -9,7 +9,9 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-
+/*
+Domain Object for Account, Handles its balances in a thread safe way
+ */
 
 @AllArgsConstructor
 public class Account {

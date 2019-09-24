@@ -12,6 +12,14 @@ import javax.inject.Singleton;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
+/*
+The Account Boundary deals with all Account operations.
+Creating an Account
+Getting a list of accounts or a specific account
+Getting the Transactions on an account.
+It is available as a Singleton Scoped Bean through the application and Depends on a Singleton scoped bean of the Account Service
+
+ */
 @Singleton
 public class Accounts {
     private final AccountService accountService;

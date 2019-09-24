@@ -14,7 +14,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-
+/*
+Service to Manage Account operations
+Its major purpose if to persist the Accounts
+Availabe as a Single instance throughout the application
+ */
 @Singleton
 public class AccountService {
     private final AccountStore accountStore;
@@ -35,7 +39,6 @@ public class AccountService {
         }else{
             return account;
         }
-
     }
     public Account withdraw(UUID accountId,BigDecimal amount) throws AccountNotFoundException {
         Account account=this.accountStore.getAccount(accountId);

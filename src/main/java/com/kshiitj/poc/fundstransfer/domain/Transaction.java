@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.UUID;
+/*
+Domain Object for Transaction
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
